@@ -1,0 +1,7 @@
+{
+  "name": "BARCELONA 2026",
+  "description": "Tu asistente personal para la escala en Barcelona el 12 de Abril de 2026. Itinerario detallado, mapa con track real y control de gastos.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

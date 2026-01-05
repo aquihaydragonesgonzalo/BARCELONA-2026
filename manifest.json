@@ -1,0 +1,26 @@
+
+{
+  "name": "Guía Barcelona MSC 2026",
+  "short_name": "Barcelona 2026",
+  "description": "Itinerario y guía personal para la escala en Barcelona desde la Terminal de Cruceros",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4eAhPZi-wRDG4ROiBAC_aUjXozOcgs3bAOFccQ74NtrVgbj7M41yqOdmhtoc8LRgxSNHqCYDyGgY69Is7ajx8CTjjiL00-56BvUou9fmYx2Ao5sg-XJbOA-HHkJ9Nv55EqOVrfWaUZWphzMPFZ6wtWmYVrDQFcCWiCXBPXtd0u6BRDvJBmpv-71yWNf0/s320/Gemini_Generated_Image_whw9ufwhw9ufwhw9.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4eAhPZi-wRDG4ROiBAC_aUjXozOcgs3bAOFccQ74NtrVgbj7M41yqOdmhtoc8LRgxSNHqCYDyGgY69Is7ajx8CTjjiL00-56BvUou9fmYx2Ao5sg-XJbOA-HHkJ9Nv55EqOVrfWaUZWphzMPFZ6wtWmYVrDQFcCWiCXBPXtd0u6BRDvJBmpv-71yWNf0/s320/Gemini_Generated_Image_whw9ufwhw9ufwhw9.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
