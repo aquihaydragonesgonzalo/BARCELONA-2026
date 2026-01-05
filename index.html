@@ -73,8 +73,8 @@
     "lucide-react": "https://esm.sh/lucide-react@0.263.1?external=react",
     "recharts": "https://esm.sh/recharts@2.13.0?external=react",
     "leaflet": "https://esm.sh/leaflet@1.9.4",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
@@ -568,9 +568,80 @@
                 }
             };
 
+            const getWeatherIcon = (code, size = 20) => {
+                if (code <= 1) return <Sun size={size} className="text-amber-500" />;
+                if (code <= 3) return <Cloud size={size} className="text-slate-400" />;
+                if (code <= 67) return <CloudRain size={size} className="text-blue-500" />;
+                if (code <= 99) return <CloudLightning size={size} className="text-indigo-600" />;
+                return <Wind size={size} className="text-slate-400" />;
+            };
+
+            const formatDayName = (dateStr) => {
+                const date = new Date(dateStr);
+                const today = new Date().toLocaleDateString();
+                if (date.toLocaleDateString() === today) return "Hoy";
+                return new Intl.DateTimeFormat('es-ES', { weekday: 'short' }).format(date);
+            };
+
             return (
                 <div className="pb-32 px-4 pt-6 max-w-lg mx-auto h-full overflow-y-auto no-scrollbar">
                 <h2 className="text-2xl font-bold text-blue-900 mb-6 uppercase tracking-tight">Guía Barcelona</h2>
+
+                {/* Weather Section */}
+                <div className="mb-8">
+                    <div className="flex items-center justify-between mb-4 px-1">
+                    <h3 className="text-sm font-black text-slate-800 flex items-center uppercase tracking-widest">
+                        <Thermometer size={18} className="mr-2 text-blue-900"/> El Tiempo
+                    </h3>
+                    <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">BCN</span>
+                    </div>
+                    
+                    {loadingWeather ? (
+                    <div className="h-32 bg-white rounded-3xl animate-pulse border border-blue-50"></div>
+                    ) : (
+                    <div className="space-y-4">
+                        {/* Hourly */}
+                        <div className="bg-white p-5 rounded-[2rem] border border-blue-50 shadow-md overflow-hidden">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Previsión por horas</p>
+                        <div className="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+                            {weather.hourly.time.slice(0, 24).filter((_, i) => {
+                            const hour = new Date(weather.hourly.time[i]).getHours();
+                            return hour >= 8 && hour <= 21;
+                            }).map((time, i) => (
+                            <div key={time} className="flex flex-col items-center min-w-[50px]">
+                                <span className="text-[10px] font-bold text-slate-500 mb-2">{new Date(time).getHours()}:00</span>
+                                <div className="bg-slate-50 p-2 rounded-2xl mb-2">
+                                {getWeatherIcon(weather.hourly.code[i], 20)}
+                                </div>
+                                <span className="text-xs font-black text-blue-900">{Math.round(weather.hourly.temperature[i])}°</span>
+                            </div>
+                            ))}
+                        </div>
+                        </div>
+
+                        {/* 5 Day */}
+                        <div className="bg-white p-5 rounded-[2rem] border border-blue-50 shadow-md">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                            <CalendarDays size={14} className="mr-1.5" /> Próximos 5 días
+                        </p>
+                        <div className="space-y-3">
+                            {weather.daily.time.slice(0, 5).map((day, i) => (
+                            <div key={day} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                                <span className="text-xs font-bold text-slate-700 w-12 capitalize">{formatDayName(day)}</span>
+                                <div className="flex items-center gap-3">
+                                {getWeatherIcon(weather.daily.weathercode[i], 18)}
+                                </div>
+                                <div className="flex gap-3 text-xs font-black w-20 justify-end">
+                                <span className="text-blue-900">{Math.round(weather.daily.temperature_2m_max[i])}°</span>
+                                <span className="text-slate-300">{Math.round(weather.daily.temperature_2m_min[i])}°</span>
+                                </div>
+                            </div>
+                            ))}
+                        </div>
+                        </div>
+                    </div>
+                    )}
+                </div>
 
                 <div className="mb-8 bg-rose-700 rounded-[2rem] p-6 shadow-xl text-white relative overflow-hidden border-2 border-white/10">
                     <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
@@ -579,15 +650,6 @@
                     <p className="text-xs text-rose-50 mb-6 leading-relaxed font-medium">Si te desorientas o pierdes el bus, contacta inmediatamente.</p>
                     <button onClick={() => window.open('https://wa.me/?text=SOS_Barcelona', '_blank')} className="w-full py-4 bg-white text-rose-800 font-black rounded-2xl flex items-center justify-center gap-2 shadow-lg uppercase tracking-widest text-sm active:scale-95 transition-transform"><Send size={18} /> Enviar Localización</button>
                     </div>
-                </div>
-
-                <div className="mb-8">
-                    <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center uppercase tracking-widest px-1"><Thermometer size={18} className="mr-2 text-blue-900"/> Tiempo en Barcelona</h3>
-                    {loadingWeather ? (<div className="h-24 bg-white rounded-3xl animate-pulse border border-blue-50"></div>) : (
-                        <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-xl overflow-hidden">
-                            <span className="text-sm font-black text-blue-900">Hoy: {Math.round(weather.daily.temperature_2m_max[0])}°C Máx</span>
-                        </div>
-                    )}
                 </div>
 
                 <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center uppercase tracking-widest px-1"><Languages size={18} className="mr-2 text-blue-900"/> Catalán Básico</h3>

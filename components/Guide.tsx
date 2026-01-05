@@ -32,9 +32,8 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        // Coordenadas actualizadas para Barcelona (aprox 41.38, 2.17)
         const response = await fetch(
-          'https://api.open-meteo.com/v1/forecast?latitude=41.38&longitude=2.17&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FMadrid'
+          'https://api.open-meteo.com/v1/forecast?latitude=41.3888&longitude=2.1590&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FMadrid'
         );
         const data = await response.json();
         setWeather({
@@ -60,10 +59,11 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
   }, []);
 
   const getWeatherIcon = (code: number, size = 20) => {
+    // WMO Weather interpretation codes (https://open-meteo.com/en/docs)
     if (code <= 1) return <Sun size={size} className="text-amber-500" />;
     if (code <= 3) return <Cloud size={size} className="text-slate-400" />;
     if (code <= 67) return <CloudRain size={size} className="text-blue-500" />;
-    if (code <= 99) return <CloudLightning size={size} className="text-purple-500" />;
+    if (code <= 99) return <CloudLightning size={size} className="text-indigo-600" />;
     return <Wind size={size} className="text-slate-400" />;
   };
 
@@ -71,7 +71,7 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = 'ca-ES'; // Catalán para Barcelona
+      utterance.lang = 'ca-ES'; 
       utterance.rate = 0.85;
       setPlaying(word);
       utterance.onend = () => setPlaying(null);
@@ -81,73 +81,83 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
 
   const handleSOS = () => {
     const message = userLocation 
-      ? `¡SOS! Necesito ayuda en Barcelona. Mi ubicación actual es: https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}`
+      ? `¡SOS! Necesito ayuda en Barcelona. Mi ubicación: https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}`
       : `¡SOS! Necesito ayuda en Barcelona. No puedo obtener mi ubicación GPS.`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const formatDate = (dateStr: string) => {
+  const formatDayName = (dateStr: string) => {
     const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('es-ES', { weekday: 'short', day: 'numeric' }).format(date);
+    const today = new Date().toLocaleDateString();
+    if (date.toLocaleDateString() === today) return "Hoy";
+    return new Intl.DateTimeFormat('es-ES', { weekday: 'short' }).format(date);
   };
 
-  // Datos del resumen de la visita actualizados para Barcelona
-  const visitSummary = {
-    totalWindow: "10h 00min", // De 08:00 a 18:00
-    sightseeingTime: "5h 20min", // Tiempo neto en Barcelona (aprox)
-    logisticsTime: "1h 30min", // Traslados puerto-ciudad
-    estimatedDistance: "6.2 km",
-    stepsApprox: "~8.500",
-    poiCount: 13,
-    accessibility: "Metro + Caminata"
+  const formatHour = (timeStr: string) => {
+    return new Date(timeStr).getHours() + ":00";
   };
 
   return (
     <div className="pb-32 px-4 pt-6 max-w-lg mx-auto h-full overflow-y-auto no-scrollbar">
       <h2 className="text-2xl font-bold text-blue-900 mb-6 uppercase tracking-tight">Guía Barcelona</h2>
 
-      {/* Resumen de la Visita */}
-      <div className="mb-8 bg-white rounded-[2rem] border border-blue-50 shadow-md p-6 overflow-hidden relative">
-        <div className="flex items-center gap-2 mb-4">
-          <ActivityIcon size={18} className="text-blue-700" />
-          <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Resumen de la Visita</h3>
+      {/* Weather Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4 px-1">
+          <h3 className="text-sm font-black text-slate-800 flex items-center uppercase tracking-widest">
+            <Thermometer size={18} className="mr-2 text-blue-900"/> El Tiempo
+          </h3>
+          <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">BCN</span>
         </div>
         
-        <div className="grid grid-cols-2 gap-y-5 gap-x-4">
-          <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mb-1">Escala Total</span>
-            <div className="flex items-center gap-1.5">
-              <Clock size={14} className="text-blue-600" />
-              <span className="text-sm font-black text-blue-950">{visitSummary.totalWindow}</span>
-            </div>
+        {loadingWeather ? (
+          <div className="space-y-4">
+            <div className="h-32 bg-white rounded-3xl animate-pulse border border-blue-50"></div>
+            <div className="h-48 bg-white rounded-3xl animate-pulse border border-blue-50"></div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mb-1">Turismo Activo</span>
-            <div className="flex items-center gap-1.5">
-              <Sun size={14} className="text-amber-500" />
-              <span className="text-sm font-black text-blue-950">{visitSummary.sightseeingTime}</span>
+        ) : (
+          <div className="space-y-4">
+            {/* Hourly Forecast */}
+            <div className="bg-white p-5 rounded-[2rem] border border-blue-50 shadow-md overflow-hidden">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Previsión por horas</p>
+              <div className="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+                {weather?.hourly.time.slice(0, 24).filter((_, i) => {
+                  const hour = new Date(weather.hourly.time[i]).getHours();
+                  return hour >= 8 && hour <= 21; // Escala diurna
+                }).map((time, i) => (
+                  <div key={time} className="flex flex-col items-center min-w-[50px]">
+                    <span className="text-[10px] font-bold text-slate-500 mb-2">{formatHour(time)}</span>
+                    <div className="bg-slate-50 p-2 rounded-2xl mb-2">
+                      {getWeatherIcon(weather.hourly.code[i], 20)}
+                    </div>
+                    <span className="text-xs font-black text-blue-900">{Math.round(weather.hourly.temperature[i])}°</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mb-1">Distancia a pie</span>
-            <div className="flex items-center gap-1.5">
-              <ActivityIcon size={14} className="text-emerald-600" />
-              <span className="text-sm font-black text-blue-950">{visitSummary.estimatedDistance}</span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mb-1">Pasos aprox.</span>
-            <div className="flex items-center gap-1.5">
-              <Footprints size={14} className="text-slate-600" />
-              <span className="text-sm font-black text-blue-950">{visitSummary.stepsApprox}</span>
-            </div>
-          </div>
-        </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-50 flex justify-between items-center text-[9px] font-bold uppercase text-slate-500">
-          <span>{visitSummary.poiCount} Puntos de Interés</span>
-          <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-100">Intenso</span>
-        </div>
+            {/* 5 Day Forecast */}
+            <div className="bg-white p-5 rounded-[2rem] border border-blue-50 shadow-md">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center">
+                <CalendarDays size={14} className="mr-1.5" /> Próximos 5 días
+              </p>
+              <div className="space-y-3">
+                {weather?.daily.time.slice(0, 5).map((day, i) => (
+                  <div key={day} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                    <span className="text-xs font-bold text-slate-700 w-12 capitalize">{formatDayName(day)}</span>
+                    <div className="flex items-center gap-3">
+                      {getWeatherIcon(weather.daily.weathercode[i], 18)}
+                    </div>
+                    <div className="flex gap-3 text-xs font-black w-20 justify-end">
+                      <span className="text-blue-900">{Math.round(weather.daily.temperature_2m_max[i])}°</span>
+                      <span className="text-slate-300">{Math.round(weather.daily.temperature_2m_min[i])}°</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* SOS Section */}
@@ -159,65 +169,12 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
             <h3 className="font-black text-lg uppercase tracking-widest">ASISTENCIA SOS</h3>
           </div>
           <p className="text-xs text-rose-50 mb-6 leading-relaxed font-medium">
-            Si te desorientas en el centro, envía tu ubicación GPS exacta al contacto de emergencia por WhatsApp.
+            Si te desorientas en el centro o pierdes el bus de vuelta, contacta inmediatamente.
           </p>
           <button onClick={handleSOS} className="w-full py-4 bg-white text-rose-800 font-black rounded-2xl flex items-center justify-center gap-2 shadow-lg uppercase tracking-widest text-sm active:scale-95 transition-transform">
             <Send size={18} /> Enviar Localización
           </button>
         </div>
-      </div>
-
-      {/* Weather Section */}
-      <div className="mb-8">
-        <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center uppercase tracking-widest px-1">
-          <Thermometer size={18} className="mr-2 text-blue-900"/> Tiempo en Barcelona
-        </h3>
-        
-        {loadingWeather ? (
-          <div className="h-24 bg-white rounded-3xl animate-pulse border border-blue-50"></div>
-        ) : (
-          <>
-            {/* Hourly Forecast */}
-            <div className="bg-white p-2 pb-5 rounded-[2.5rem] border border-blue-50 shadow-xl overflow-hidden mb-4">
-              <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-widest text-center mt-2 mb-2">Hoy</h4>
-              <div className="flex overflow-x-auto gap-3 px-6 py-2 no-scrollbar">
-                {weather?.hourly.time.map((time, i) => {
-                  const hour = new Date(time).getHours();
-                  if (hour >= 8 && hour <= 20) return (
-                    <div key={time} className="flex flex-col items-center justify-between min-w-[70px] p-3 bg-blue-50/50 rounded-3xl border border-blue-100">
-                      <span className="text-[10px] font-black text-blue-400 mb-2">{hour}:00</span>
-                      <div className="p-2 bg-white rounded-2xl mb-2 shadow-sm">{getWeatherIcon(weather.hourly.code[i], 24)}</div>
-                      <span className="text-sm font-black text-blue-900">{Math.round(weather.hourly.temperature[i])}°</span>
-                    </div>
-                  );
-                  return null;
-                })}
-              </div>
-            </div>
-
-            {/* 5 Day Forecast */}
-            <div className="bg-white rounded-[2rem] border border-blue-50 shadow-lg p-5">
-              <div className="flex items-center gap-2 mb-4 px-1">
-                <CalendarDays size={16} className="text-blue-500" />
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Próximos 5 días</span>
-              </div>
-              <div className="space-y-1">
-                {weather?.daily.time.slice(0, 5).map((day, i) => (
-                  <div key={day} className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-xl transition-colors">
-                    <span className="w-16 text-xs font-bold text-slate-600 capitalize">{formatDate(day)}</span>
-                    <div className="flex items-center gap-3">
-                      {getWeatherIcon(weather.daily.weathercode[i], 18)}
-                    </div>
-                    <div className="flex items-center gap-3 w-20 justify-end">
-                      <span className="text-xs font-bold text-slate-800">{Math.round(weather.daily.temperature_2m_max[i])}°</span>
-                      <span className="text-xs font-medium text-slate-400">{Math.round(weather.daily.temperature_2m_min[i])}°</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
       </div>
 
       {/* Language Section */}
