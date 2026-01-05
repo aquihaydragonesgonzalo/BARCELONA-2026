@@ -89,27 +89,29 @@ export const INITIAL_ITINERARY: Activity[] = [
     "endTime": "12:20",
     "locationName": "Sagrada Família",
     "coords": { "lat": 41.40406, "lng": 2.173935 },
-    "description": "Visita exterior de la Fachada de la Pasión y Natividad. Obra magna de Gaudí.",
+    "description": "Visita exterior de la Fachada de la Pasión y Natividad. La gran obra maestra inacabada de Antoni Gaudí.",
     "keyDetails": "Fotos desde Plaza de Gaudí (parque con lago).",
     "priceEUR": 0,
     "type": "sightseeing",
     "completed": false,
-    "contingencyNote": "Entrada estricta con hora reservada. Si no hay tickets, visitar tienda oficial."
+    "contingencyNote": "Entrada estricta con hora reservada. Si no hay tickets, visitar tienda oficial.",
+    "audioGuideText": "Estás ante el monumento más visitado de España. La Sagrada Familia es una biblia en piedra. Gaudí dedicó sus últimos 12 años exclusivamente a esta basílica. Observa la Fachada del Nacimiento: es una explosión de vida y naturaleza. Al otro lado, la Fachada de la Pasión es austera y angular, representando el sufrimiento. Cuando se termine, su torre central será el punto más alto de Barcelona, pero siempre un metro por debajo de la montaña de Montjuic, porque Gaudí decía que la obra del hombre no debe superar a la de Dios."
  },
  {
     "id": "5",
     "title": "Paseo Modernista a La Pedrera",
     "startTime": "12:20",
     "endTime": "12:50",
-    "locationName": "Calle Mallorca / Provença",
+    "locationName": "Paseo de Gracia",
     "endLocationName": "La Pedrera (Casa Milà)",
     "coords": { "lat": 41.40406, "lng": 2.173935 },
     "endCoords": { "lat": 41.395174, "lng": 2.161777 },
-    "description": "Caminata por el Eixample admirando la arquitectura de Barcelona.",
+    "description": "Caminata por el Eixample, el corazón del diseño burgués de principios del siglo XX.",
     "keyDetails": "Distancia 1.4km. Ruta agradable y plana.",
     "priceEUR": 0,
     "type": "walk",
-    "completed": false
+    "completed": false,
+    "audioGuideText": "Estamos recorriendo el Eixample, un barrio diseñado con una cuadrícula perfecta por Ildefons Cerdà. Al final de este paseo nos espera La Pedrera. Su nombre oficial es Casa Milà, pero los barceloneses la apodaron 'la cantera' por su aspecto rudo de piedra ondulada. Gaudí se inspiró en las formas de la naturaleza, por eso no verás ni una sola línea recta en su fachada. Sus balcones de hierro forjado parecen algas marinas y su azotea es famosa por las chimeneas que parecen guerreros petrificados."
  },
  {
     "id": "6",
@@ -118,11 +120,12 @@ export const INITIAL_ITINERARY: Activity[] = [
     "endTime": "13:00",
     "locationName": "Passeig de Gràcia",
     "coords": { "lat": 41.391714, "lng": 2.165002 },
-    "description": "Bajada por Paseo de Gracia hasta la Manzana de la Discordia.",
+    "description": "Admiración de la joya de la 'Manzana de la Discordia'. La fachada más colorida de la ciudad.",
     "keyDetails": "Admirar fachada y Casa Amatller (al lado).",
     "priceEUR": 0,
     "type": "sightseeing",
-    "completed": false
+    "completed": false,
+    "audioGuideText": "Mira la fachada de la Casa Batlló. Es una de las obras más creativas de Gaudí. Muchos ven en ella la leyenda de Sant Jordi: el tejado escamoso es el lomo del dragón, y la torre con la cruz es la lanza del caballero. Las columnas de las plantas bajas parecen huesos, por eso también se la conoce como la 'Casa de los Huesos'. Los balcones tienen forma de antifaces, y todo el conjunto brilla con fragmentos de cerámica de colores que imitan la superficie de un mar en calma."
  },
  {
     "id": "7",
@@ -147,11 +150,12 @@ export const INITIAL_ITINERARY: Activity[] = [
     "endTime": "14:00",
     "locationName": "Mercado de la Boquería",
     "coords": { "lat": 41.381939, "lng": 2.172071 },
-    "description": "El famoso Mercado de la Boquería esta cerrado por ser Domingo",
+    "description": "Recorrido por la vía más famosa de Barcelona hacia el laberinto medieval.",
     "keyDetails": "Evitar terrazas y sitios para comer que son muy caros en esta zona",
     "priceEUR": 0,
     "type": "walk",
-    "completed": false
+    "completed": false,
+    "audioGuideText": "Caminas por Las Ramblas, un antiguo torrente de agua que hoy es la arteria de la ciudad. A tu derecha está el Mercado de la Boquería; aunque hoy domingo esté cerrado, su estructura metálica de mil novecientos catorce sigue siendo impresionante. Al adentrarnos en las calles laterales, pasamos del ruido de la rambla al silencio del Barrio Gótico. Aquí se encontraba la antigua ciudad romana de Barcino y todavía hoy podemos ver restos de sus murallas y el trazado de sus plazas señoriales."
  },
  {
     "id": "9",
@@ -160,11 +164,12 @@ export const INITIAL_ITINERARY: Activity[] = [
     "endTime": "14:30",
     "locationName": "Basílica de Santa Maria del Mar",
     "coords": { "lat": 41.383497, "lng": 2.181772 },
-    "description": "Paseo histórico por las callejuelas del centro.",
+    "description": "Paseo histórico por las callejuelas del centro. El corazón de la Barcelona medieval.",
     "keyDetails": "La Catedral del Mar.",
     "priceEUR": 0,
     "type": "walk",
-    "completed": false
+    "completed": false,
+    "audioGuideText": "Llegamos a Santa Maria del Mar, conocida como la Catedral del Mar. Es el ejemplo más perfecto del gótico catalán. A diferencia del gótico francés, aquí prima la horizontalidad y la sobriedad. Fue construida en un tiempo récord de cincuenta y cuatro años gracias al esfuerzo de los 'bastaixos', los estibadores del puerto, que cargaban las piedras una a una desde la montaña de Montjuic. Su interior es un espacio diáfano y elegante donde la luz juega un papel fundamental a través de sus rosetones."
  },
  {
     "id": "10",
@@ -175,11 +180,12 @@ export const INITIAL_ITINERARY: Activity[] = [
     "endLocationName": "Monumento a Colón",
     "coords": { "lat": 41.383497, "lng": 2.181772 },
     "endCoords": { "lat": 41.375798, "lng": 2.177774 },
-    "description": "Paseo por el Paseo Marítimo para tomar el shuttle.",
+    "description": "Paseo por el Paseo Marítimo para tomar el shuttle. Disfrutando de la brisa marina.",
     "keyDetails": "Paseo de unos 20-25 minutos por el frente marítimo.",
     "priceEUR": 0,
     "type": "walk",
-    "completed": false
+    "completed": false,
+    "audioGuideText": "Estamos regresando hacia el puerto por el frente marítimo. A tu izquierda queda el Port Vell, el puerto antiguo, que fue renovado totalmente para las Olimpiadas de mil novecientos noventa y dos. Al fondo verás la columna de Colón, con el almirante señalando hacia el mar. Es el momento ideal para tomar las últimas fotos del skyline de Barcelona y prepararnos para el regreso al barco. Recuerda verificar que tienes contigo todos los tickets y la tarjeta del crucero."
  },
  {
     "id": "11",
