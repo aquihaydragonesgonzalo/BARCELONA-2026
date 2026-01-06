@@ -104,7 +104,7 @@
             Circle, MapPin, AlertTriangle, Clock, ExternalLink, AlertCircle,
             Volume2, Languages, PhoneCall, Thermometer, ArrowRight,
             Sun, Cloud, CloudRain, CloudLightning, Calendar, Footprints, Activity as ActivityIcon, Send,
-            Wind, CalendarDays, TrendingDown, Info, Ticket
+            Wind, CalendarDays, TrendingDown, Info, Ticket, Landmark, Timer
         } from 'lucide-react';
         import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -252,7 +252,7 @@
             "priceEUR": 2.9,
             "type": "transport",
             "completed": false,
-            "googleMapsUrl": "https://maps.app.goo.gl/PZegJ2aRa87uQQdk7"
+            "googleMapsUrl": "https://maps.app.goo.gl/pcdyeNVY2btj4WPS8"
         },
         {
             "id": "8",
@@ -600,6 +600,63 @@
             return (
                 <div className="pb-32 px-4 pt-6 max-w-lg mx-auto h-full overflow-y-auto no-scrollbar">
                 <h2 className="text-2xl font-bold text-blue-900 mb-6 uppercase tracking-tight">Guía Barcelona</h2>
+
+                {/* Resumen de la Visita */}
+                <div className="mb-10">
+                  <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center uppercase tracking-widest px-1">
+                    <ActivityIcon size={18} className="mr-2 text-blue-900"/> Resumen de la Escala
+                  </h3>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+                      <div className="bg-blue-100 p-2.5 rounded-2xl mb-3">
+                        <Clock size={20} className="text-blue-700" />
+                      </div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Tiempo Total</span>
+                      <span className="text-lg font-black text-blue-900">9h 30m</span>
+                      <span className="text-[9px] text-slate-500 font-bold">08:00 - 17:30</span>
+                    </div>
+
+                    <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+                      <div className="bg-amber-100 p-2.5 rounded-2xl mb-3">
+                        <Timer size={20} className="text-amber-700" />
+                      </div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Transporte</span>
+                      <span className="text-lg font-black text-amber-700">~1h 50m</span>
+                      <span className="text-[9px] text-slate-500 font-bold">Shuttle + Metro</span>
+                    </div>
+
+                    <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+                      <div className="bg-emerald-100 p-2.5 rounded-2xl mb-3">
+                        <Landmark size={20} className="text-emerald-700" />
+                      </div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Turismo Activo</span>
+                      <span className="text-lg font-black text-emerald-700">~4h 30m</span>
+                      <span className="text-[9px] text-slate-500 font-bold">Tiempo en Barcelona</span>
+                    </div>
+
+                    <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+                      <div className="bg-rose-100 p-2.5 rounded-2xl mb-3">
+                        <Footprints size={20} className="text-rose-700" />
+                      </div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Distancia Pie</span>
+                      <span className="text-lg font-black text-rose-700">~5.4 km</span>
+                      <span className="text-[9px] text-slate-500 font-bold">Total recorrido</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 bg-blue-50 p-4 rounded-3xl border border-blue-100 flex items-start gap-3">
+                    <div className="bg-blue-600 p-1.5 rounded-full mt-0.5">
+                      <Navigation size={12} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold text-blue-900 leading-tight">Nota de Interés:</p>
+                      <p className="text-[10px] text-blue-700 mt-1 leading-relaxed">
+                        La terminal de cruceros está a unos 10-15 mins en shuttle del Monumento a Colón. El Metro L3 (verde) es la vía más rápida para cruzar la ciudad de sur a norte.
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Weather Section */}
                 <div className="mb-8">

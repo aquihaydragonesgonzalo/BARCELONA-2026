@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PRONUNCIATIONS } from '../constants';
 import { 
   Volume2, Thermometer, PhoneCall, Send, Languages, 
-  Sun, Cloud, CloudRain, CloudLightning, Wind, Activity as ActivityIcon, Clock, Footprints, CalendarDays
+  Sun, Cloud, CloudRain, CloudLightning, Wind, Activity as ActivityIcon, Clock, Footprints, CalendarDays, Timer, Navigation, Landmark
 } from 'lucide-react';
 import { Coordinates } from '../types';
 
@@ -59,7 +59,6 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
   }, []);
 
   const getWeatherIcon = (code: number, size = 20) => {
-    // WMO Weather interpretation codes (https://open-meteo.com/en/docs)
     if (code <= 1) return <Sun size={size} className="text-amber-500" />;
     if (code <= 3) return <Cloud size={size} className="text-slate-400" />;
     if (code <= 67) return <CloudRain size={size} className="text-blue-500" />;
@@ -101,11 +100,68 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
     <div className="pb-32 px-4 pt-6 max-w-lg mx-auto h-full overflow-y-auto no-scrollbar">
       <h2 className="text-2xl font-bold text-blue-900 mb-6 uppercase tracking-tight">Guía Barcelona</h2>
 
+      {/* Resumen de la Visita */}
+      <div className="mb-10">
+        <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center uppercase tracking-widest px-1">
+          <ActivityIcon size={18} className="mr-2 text-blue-900"/> Resumen de la Escala
+        </h3>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-blue-100 p-2.5 rounded-2xl mb-3">
+              <Clock size={20} className="text-blue-700" />
+            </div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Tiempo Total</span>
+            <span className="text-lg font-black text-blue-900">9h 30m</span>
+            <span className="text-[9px] text-slate-500 font-bold">08:00 - 17:30</span>
+          </div>
+
+          <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-amber-100 p-2.5 rounded-2xl mb-3">
+              <Timer size={20} className="text-amber-700" />
+            </div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Transporte</span>
+            <span className="text-lg font-black text-amber-700">~1h 50m</span>
+            <span className="text-[9px] text-slate-500 font-bold">Shuttle + Metro</span>
+          </div>
+
+          <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-emerald-100 p-2.5 rounded-2xl mb-3">
+              <Landmark size={20} className="text-emerald-700" />
+            </div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Turismo Activo</span>
+            <span className="text-lg font-black text-emerald-700">~4h 30m</span>
+            <span className="text-[9px] text-slate-500 font-bold">Tiempo en Barcelona</span>
+          </div>
+
+          <div className="bg-white p-5 rounded-[2.5rem] border border-blue-50 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-rose-100 p-2.5 rounded-2xl mb-3">
+              <Footprints size={20} className="text-rose-700" />
+            </div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Distancia Pie</span>
+            <span className="text-lg font-black text-rose-700">~5.4 km</span>
+            <span className="text-[9px] text-slate-500 font-bold">Total recorrido</span>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-blue-50 p-4 rounded-3xl border border-blue-100 flex items-start gap-3">
+          <div className="bg-blue-600 p-1.5 rounded-full mt-0.5">
+            <Navigation size={12} className="text-white" />
+          </div>
+          <div>
+            <p className="text-[11px] font-bold text-blue-900 leading-tight">Nota de Interés:</p>
+            <p className="text-[10px] text-blue-700 mt-1 leading-relaxed">
+              La terminal de cruceros está a unos 10-15 mins en shuttle del Monumento a Colón. El Metro L3 (verde) es la vía más rápida para cruzar la ciudad de sur a norte.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Weather Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4 px-1">
           <h3 className="text-sm font-black text-slate-800 flex items-center uppercase tracking-widest">
-            <Thermometer size={18} className="mr-2 text-blue-900"/> El Tiempo
+            <Thermometer size={18} className="mr-2 text-blue-900"/> El Tiempo en Barcelona
           </h3>
           <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">BCN</span>
         </div>
@@ -123,7 +179,7 @@ const Guide: React.FC<GuideProps> = ({ userLocation }) => {
               <div className="flex overflow-x-auto gap-4 no-scrollbar pb-2">
                 {weather?.hourly.time.slice(0, 24).filter((_, i) => {
                   const hour = new Date(weather.hourly.time[i]).getHours();
-                  return hour >= 8 && hour <= 21; // Escala diurna
+                  return hour >= 8 && hour <= 21; 
                 }).map((time, i) => (
                   <div key={time} className="flex flex-col items-center min-w-[50px]">
                     <span className="text-[10px] font-bold text-slate-500 mb-2">{formatHour(time)}</span>
