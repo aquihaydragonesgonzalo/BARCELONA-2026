@@ -20,7 +20,6 @@ const MapComponent: React.FC<MapProps> = ({ activities, userLocation, focusedLoc
 
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
-    // Centro inicial ajustado a Barcelona (aprox Plaza Cataluña)
     const map = L.map(mapContainerRef.current, { zoomControl: false }).setView([41.3851, 2.1734], 13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 18,
@@ -48,12 +47,25 @@ const MapComponent: React.FC<MapProps> = ({ activities, userLocation, focusedLoc
 
     activities.forEach(act => {
       const marker = L.marker([act.coords.lat, act.coords.lng], { icon: defaultIcon }).addTo(map);
-      marker.bindPopup(`
-        <div style="padding: 10px; font-family: 'Roboto Condensed', sans-serif;">
-          <h3 style="margin: 0; font-weight: bold; color: #1e3a8a;">${act.title}</h3>
-          <p style="margin: 4px 0 0 0; font-size: 11px; color: #64748b;">${act.locationName}</p>
+      
+      // Determine navigation URL
+      const navUrl = act.googleMapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${act.coords.lat},${act.coords.lng}`;
+
+      // Custom Popup HTML
+      const popupContent = `
+        <div style="padding: 4px; min-width: 180px; font-family: 'Roboto Condensed', sans-serif;">
+          <h3 style="margin: 0 0 4px 0; font-weight: 800; color: #1e3a8a; font-size: 14px; text-transform: uppercase;">${act.title}</h3>
+          <p style="margin: 0 0 12px 0; font-size: 12px; color: #475569; line-height: 1.4;">${act.description}</p>
+          <a href="${navUrl}" target="_blank" style="display: block; width: 100%; text-align: center; background-color: #1e3a8a; color: white; text-decoration: none; font-weight: 700; font-size: 11px; padding: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            INICIAR RUTA
+          </a>
         </div>
-      `);
+      `;
+
+      marker.bindPopup(popupContent, {
+        maxWidth: 240,
+        className: 'custom-leaflet-popup'
+      });
       layersRef.current.push(marker);
     });
 
