@@ -46,9 +46,15 @@ const App: React.FC = () => {
   useEffect(() => {
     if ('geolocation' in navigator) {
       const watchId = navigator.geolocation.watchPosition(
-        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (pos) => {
+          setUserLocation({ 
+            lat: pos.coords.latitude, 
+            lng: pos.coords.longitude,
+            accuracy: pos.coords.accuracy
+          });
+        },
         (err) => console.log("GPS no disponible", err),
-        { enableHighAccuracy: true }
+        { enableHighAccuracy: true, maximumAge: 1000 }
       );
       return () => navigator.geolocation.clearWatch(watchId);
     }
